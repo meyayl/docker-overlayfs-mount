@@ -1,15 +1,17 @@
 [![](https://images.microbadger.com/badges/image/meyay/overlayfs-mount.svg)](https://microbadger.com/images/meyay/overlayfs-mount "Get your own image badge on microbadger.com")[![](https://images.microbadger.com/badges/version/meyay/overlayfs-mount.svg)](https://microbadger.com/images/meyay/overlayfs-mount "Get your own version badge on microbadger.com")[![](https://images.microbadger.com/badges/commit/meyay/overlayfs-mount.svg)](https://microbadger.com/images/meyay/overlayfs-mount "Get your own commit badge on microbadger.com")
 # overlayfs-mount
 
-Create an overlayfs mount, merging the content of a read only source, and a read/write source folder.
+Create a fuse-overlayfs mount, merging the content of a read only source, and a read/write source folder.
 
-It is based on alpine linux, compiled from sources and  and leverages s6-overlay's SIGTERM handling to achieve a clean unionfs unmount when the container is stopped.
+It is based on alpine linux, uses fuse3 from the edge repository, is compiled from fuse-overlayfs sources and leverages s6-overlay's SIGTERM handling to achieve clean fuse-overlayfs unmounts when the container is stopped.
 
+See for further details on fuse-overlaysfs: https://github.com/containers/fuse-overlayfs
 
 ## Docker CLI Usage 
 ```sh
 docker run -d \
  --name=overlayfs-mount \
+ --network none \
  --privileged \
  --env TZ=Europe/Berlin \
  --env PUID=1026 \
@@ -18,7 +20,7 @@ docker run -d \
  --volume $PWD/upper:/upper:rw \
  --volume $PWD/work:/work:shared \
  --volume $PWD/merge:/merge:shared \
-  meyay/overlayfs-mount:0.0.3
+  meyay/overlayfs-mount:0.3.0
 ```
 
 ## Docker Compose Usage 
@@ -26,19 +28,19 @@ docker run -d \
 version: '2.2'
 services:
   overlayfs:
-    image: meyay/overlayfs-mount:0.0.3
+    image: meyay/overlayfs-mount:0.3.0
     container_name: overlayfs-mount
+    network_mode: 'none'
     privileged: true
+    environment:
+      TZ: 'Europe/Berlin'
+      PUID: '1026'
+      PGID: '100'
     volumes:
     - $PWD/lower:/lower:ro
     - $PWD/upper:/upper:rw
     - $PWD/work:/work:shared
     - $PWD/merge:/merge:shared
-    environment:
-      TZ: 'Europe/Berlin'
-      PUID: '1026'
-      PGID: '100'
-    network_mode: 'none'
 ```
 
 ## Parameters
@@ -70,13 +72,13 @@ If the host path for the `/lower` bind is a mounted remote share, you might want
 
 If the host path for the `/upper` bind is a mounted remote share, you might want to switch the propagation from `rw` to `shared`.
 
-See for further details: https://docs.docker.com/storage/bind-mounts/#configure-bind-propagation
+See for further details on docker bind propagation: https://docs.docker.com/storage/bind-mounts/#configure-bind-propagation
 
 ## Shell access
 For shell access while the container is running, `docker exec -it overlayfs-mount /bin/sh`
 
 ## Troubleshooting
-The filesystem where the host path is located needs to be marked as shared. Otherwise the volume bindings for /work and /merge will result in an error and the container will not start. To mark a filesystem as shared, adopt following line to your needs:
+The filesystem where the host path is located needs to be marked as shared. Otherwise the volume bindings for `/work` and `/merge` will result in an error and the container will not start. To mark a filesystem as shared, adopt following line to your needs:
 ```sh
 mount --make-shared /
 ```
