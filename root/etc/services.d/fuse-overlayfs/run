@@ -1,0 +1,11 @@
+#!/usr/bin/with-contenv sh
+
+echo "$( date +'%Y/%m/%d %H:%M:%S' ) Mounting ro: ${LOWER_DIR} + rw: ${UPPER_DIR} with workdir: ${WORK_DIR} as ${MERGE_DIR}"
+
+exec /usr/local/bin/fuse-overlayfs \
+ -o uidmapping=${PUID} \
+ -o gidmapping=${PGID} \
+ -o lowerdir=${LOWER_DIR} \
+ -o upperdir=${UPPER_DIR} \
+ -o workdir=${WORK_DIR} \
+ ${MERGE_DIR}
