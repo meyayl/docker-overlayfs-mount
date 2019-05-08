@@ -36,7 +36,7 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.version=$VERSION \
       org.label-schema.schema-version="1.0"
 
-ENV S6_BEHAVIOUR_IF_STAGE2_FAILS=2 TZ="Europe/Berlin" PUID=1000 PGID=1000 LOWER_DIR=/lower UPPER_DIR=/upper WORK_DIR=/work MERGE_DIR=/merge
+ENV S6_BEHAVIOUR_IF_STAGE2_FAILS=2 TZ="Europe/Berlin" PUID=1000 PGID=1000 LOWER_DIR=/lower UPPER_DIR=/upper WORK_DIR=/work MERGED_DIR=/merged
 COPY --from=builder /tmp/fuse-overlayfs/fuse-overlayfs /tmp/fuse-overlayfs 
 
 RUN \
@@ -47,7 +47,6 @@ RUN \
   sed -i -e 's/v[[:digit:]]\.[[:digit:]]/edge/g' /etc/apk/repositories && \
   apk upgrade --update-cache --available && \
   apk add --no-cache \
-    ca-certificates \
     tzdata \
     fuse3 && \
   echo "**** configure fuse3 ****" && \
@@ -61,5 +60,5 @@ RUN \
   rm -rf /tmp/*
 
 COPY root/ /
-VOLUME ["/upper", "/lower", "/work", "/merge"]
+VOLUME ["/upper", "/lower", "/work", "/merged"]
 CMD ["/init"]
