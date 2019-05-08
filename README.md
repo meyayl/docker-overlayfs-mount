@@ -62,8 +62,8 @@ The volume parameters are split into two halves, separated by a colon, the left 
 | ------ | ------ |
 | /lower |  The read only mount point. Needs to match `LOWER_DIR`. |
 | /upper |  The read write mount point. Needs to match `UPPER_DIR`. |
-| /work |  The work dir mount. Needs to be on the same volume `/merge`. Needs to match `WORK_DIR`. |
-| /merge |  The unionfs mount. Needs to match `MERGE_DIR`. |
+| /work |  The work dir mount. Needs to be on the same volume `/merged`. Needs to match `WORK_DIR`. |
+| /merged |  The unionfs mount. Needs to match `MERGED_DIR`. |
 
 
 The examples form above assume that `/lower` and `/upper` exist localy in your filesystem.
