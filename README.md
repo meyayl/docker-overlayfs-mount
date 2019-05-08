@@ -19,7 +19,7 @@ docker run -d \
  --volume $PWD/lower:/lower:ro \
  --volume $PWD/upper:/upper:rw \
  --volume $PWD/work:/work:shared \
- --volume $PWD/merge:/merge:shared \
+ --volume $PWD/merged:/merged:shared \
   meyay/overlayfs-mount:0.3.0
 ```
 
@@ -40,7 +40,7 @@ services:
     - $PWD/lower:/lower:ro
     - $PWD/upper:/upper:rw
     - $PWD/work:/work:shared
-    - $PWD/merge:/merge:shared
+    - $PWD/merged:/merged:shared
 ```
 
 ## Parameters
@@ -51,19 +51,19 @@ The environment parameters are split into two halves, separated by an equal, the
 | TZ | Europe/Berlin | The timezone to use for file operations and the log. |
 | PUID | 1000 | The user id used to access files. |
 | PGID | 1000 | The group id used to access files. |
-| LOWER_DIR  | /lower |  Optional: the container target path for the read-only volume mapping. |
-| UPPER_DIR  | /upper |  Optional: the container target path for the read-write volume mapping. |
-| WORK_DIR  | /work |  Optional: the container target path for the work volume mapping. |
-| MERGE_DIR  | /merge |  Optional: the container target path for the merge volume mapping. |
+| LOWER_DIR  | /lower |  Optional: the container target path for the `/lower` volume mapping. |
+| UPPER_DIR  | /upper |  Optional: the container target path for the `/upper` volume mapping. |
+| WORK_DIR  | /work |  Optional: the container target path for the `/work` volume mapping. |
+| MERGED_DIR  | /merged |  Optional: the container target path for the `/merged` volume mapping. |
 
 The volume parameters are split into two halves, separated by a colon, the left hand side representing the host and the right the container side.
 
 | VOLUMES |  DESCRIPTION |
 | ------ | ------ |
-| /lower |  The read only mount point. Needs to match LOWER_DIR. |
-| /upper |  The read write mount point. Needs to match UPPER_DIR. |
-| /work |  The work dir mount. Needs to be on the same volume /merge. Needs to match WORK_DIR. |
-| /merge |  The unionfs mount. Needs to match MERGE_DIR. |
+| /lower |  The read only mount point. Needs to match `LOWER_DIR`. |
+| /upper |  The read write mount point. Needs to match `UPPER_DIR`. |
+| /work |  The work dir mount. Needs to be on the same volume `/merge`. Needs to match `WORK_DIR`. |
+| /merge |  The unionfs mount. Needs to match `MERGE_DIR`. |
 
 
 The examples form above assume that `/lower` and `/upper` exist localy in your filesystem.
@@ -78,7 +78,7 @@ See for further details on docker bind propagation: https://docs.docker.com/stor
 For shell access while the container is running, `docker exec -it overlayfs-mount /bin/sh`
 
 ## Troubleshooting
-The filesystem where the host path is located needs to be marked as shared. Otherwise the volume bindings for `/work` and `/merge` will result in an error and the container will not start. To mark a filesystem as shared, adopt following line to your needs:
+The filesystem where the host path is located needs to be marked as shared. Otherwise the volume bindings for `/work` and `/merged` will result in an error and the container will not start. To mark a filesystem as shared, adopt following line to your needs:
 ```sh
 mount --make-shared /
 ```
