@@ -20,7 +20,7 @@ docker run -d \
  --volume $PWD/upper:/upper:rw \
  --volume $PWD/work:/work:shared \
  --volume $PWD/merged:/merged:shared \
-  meyay/overlayfs-mount:0.3.0
+  meyay/overlayfs-mount:0.4.0
 ```
 
 ## Docker Compose Usage 
@@ -28,7 +28,7 @@ docker run -d \
 version: '2.2'
 services:
   overlayfs:
-    image: meyay/overlayfs-mount:0.3.0
+    image: meyay/overlayfs-mount:0.4.0
     container_name: overlayfs-mount
     network_mode: 'none'
     privileged: true
@@ -44,7 +44,7 @@ services:
 ```
 
 ## Parameters
-The environment parameters are split into two halves, separated by an equal, the left hand side representing the host and the right the container side.
+The environment parameters are split into two halves, separated by an equal, the left hand side representing the variable name and the right the value of it.
 
 | ENV| DEFAULT | DESCRIPTION |
 | ------ | ------ | ------ |
