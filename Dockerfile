@@ -1,20 +1,20 @@
 FROM alpine:3.13 as builder
 WORKDIR /tmp/
-RUN sed -i -e 's/v[[:digit:]]\.[[:digit:]]/edge/g' /etc/apk/repositories && \
+RUN sed -i -E 's/v[[:digit:]]\.[[:digit:]]{1,2}/edge/g' /etc/apk/repositories && \
     apk upgrade --update-cache --available && \
     apk add --no-cache \
-	  alpine-sdk \
-	  linux-headers \
-	  make \
-	  automake \
-	  autoconf \
-	  fuse3-dev \
-	  go-md2man \
-	  ca-certificates \
-	  wget && \
+      alpine-sdk \
+      linux-headers \
+      make \
+      automake \
+      autoconf \
+      fuse3-dev \
+      go-md2man \
+      ca-certificates \
+      wget && \
     wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub && \
-    wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.29-r0/glibc-2.29-r0.apk && \
-    apk add glibc-2.29-r0.apk && \
+    wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.33-r0/glibc-2.33-r0.apk && \
+    apk add glibc-2.33-r0.apk && \
     git clone https://github.com/containers/fuse-overlayfs && \
     cd fuse-overlayfs && \
     sh autogen.sh && \
@@ -42,9 +42,9 @@ COPY --from=builder /tmp/fuse-overlayfs/fuse-overlayfs /tmp/fuse-overlayfs
 RUN \
   echo "**** install s6-overlay ****" && \
   apk add --no-cache curl && \
-  curl -L -s https://github.com/just-containers/s6-overlay/releases/download/v1.21.8.0/s6-overlay-amd64.tar.gz | tar xvzf - -C / && \
+  curl -L -s https://github.com/just-containers/s6-overlay/releases/download/v2.2.0.3/s6-overlay-amd64.tar.gz | tar xvzf - -C / && \
   echo "**** install runtime packages ****" && \
-  sed -i -e 's/v[[:digit:]]\.[[:digit:]]/edge/g' /etc/apk/repositories && \
+  sed -i -E 's/v[[:digit:]]\.[[:digit:]]{1,2}/edge/g' /etc/apk/repositories && \
   apk upgrade --update-cache --available && \
   apk add --no-cache \
     tzdata \
