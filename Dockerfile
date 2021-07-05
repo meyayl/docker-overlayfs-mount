@@ -1,4 +1,4 @@
-FROM alpine:3.9 as builder
+FROM alpine:3.13 as builder
 WORKDIR /tmp/
 RUN sed -i -e 's/v[[:digit:]]\.[[:digit:]]/edge/g' /etc/apk/repositories && \
     apk upgrade --update-cache --available && \
@@ -23,7 +23,7 @@ RUN sed -i -e 's/v[[:digit:]]\.[[:digit:]]/edge/g' /etc/apk/repositories && \
     make && \
     make install
 
-FROM alpine:3.9  
+FROM alpine:3.13  
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
 ARG VCS_REF
