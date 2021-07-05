@@ -3,7 +3,7 @@
 
 Create a fuse-overlayfs mount, merging the content of a read only source, and a read/write source folder.
 
-It is based on alpine linux, uses fuse3 from the edge repository, is compiled from fuse-overlayfs sources and leverages s6-overlay's SIGTERM handling to achieve clean fuse-overlayfs unmounts when the container is stopped.
+It is based on alpine linux with fuse3, is compiled from fuse-overlayfs sources and leverages s6-overlay's SIGTERM handling to achive clean fuse-overlayfs unmounts when the container is stopped.
 
 See for further details on fuse-overlaysfs: https://github.com/containers/fuse-overlayfs
 
@@ -20,7 +20,7 @@ docker run -d \
  --volume $PWD/upper:/upper:rw \
  --volume $PWD/work:/work:shared \
  --volume $PWD/merged:/merged:shared \
-  meyay/overlayfs-mount:0.4.0
+  meyay/overlayfs-mount:0.5.0
 ```
 
 ## Docker Compose Usage 
@@ -28,7 +28,7 @@ docker run -d \
 version: '2.2'
 services:
   overlayfs:
-    image: meyay/overlayfs-mount:0.4.0
+    image: meyay/overlayfs-mount:0.5.0
     container_name: overlayfs-mount
     network_mode: 'none'
     privileged: true

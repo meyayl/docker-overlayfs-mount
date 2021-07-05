@@ -1,7 +1,7 @@
 FROM alpine:3.13 as builder
 WORKDIR /tmp/
-RUN sed -i -E 's/v[[:digit:]]\.[[:digit:]]{1,2}/edge/g' /etc/apk/repositories && \
-    apk upgrade --update-cache --available && \
+
+RUN apk upgrade --update-cache --available && \
     apk add --no-cache \
       alpine-sdk \
       linux-headers \
@@ -44,7 +44,6 @@ RUN \
   apk add --no-cache curl && \
   curl -L -s https://github.com/just-containers/s6-overlay/releases/download/v2.2.0.3/s6-overlay-amd64.tar.gz | tar xvzf - -C / && \
   echo "**** install runtime packages ****" && \
-  sed -i -E 's/v[[:digit:]]\.[[:digit:]]{1,2}/edge/g' /etc/apk/repositories && \
   apk upgrade --update-cache --available && \
   apk add --no-cache \
     tzdata \
