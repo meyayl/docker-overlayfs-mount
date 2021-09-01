@@ -1,4 +1,4 @@
-FROM alpine:3.13 as builder
+FROM alpine:3 as builder
 WORKDIR /tmp/
 
 RUN apk upgrade --update-cache --available && \
@@ -23,7 +23,7 @@ RUN apk upgrade --update-cache --available && \
     make && \
     make install
 
-FROM alpine:3.13  
+FROM alpine:3  
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
 ARG VCS_REF
