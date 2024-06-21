@@ -1,4 +1,4 @@
-FROM alpine:3.16 as builder
+FROM alpine:3.17 as builder
 WORKDIR /tmp/
 
 RUN set -eu;\
@@ -24,7 +24,7 @@ RUN set -eu;\
     make; \
     make install
 
-FROM alpine:3.16  
+FROM alpine:3.17  
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
 ARG VCS_REF
